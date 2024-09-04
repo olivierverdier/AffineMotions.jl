@@ -1,6 +1,6 @@
 # AffineMotions
 
-Given a group action $G \subset Diff(M)$
+Given a group action $G \subset \mathrm{Diff}(M)$
 a function $φ \colon M \to G$ is *affine* if the quantity
 ```math
 φχ(χ\cdot x) - χ φ(x) χ^{-1}
