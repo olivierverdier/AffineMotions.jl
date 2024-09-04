@@ -24,18 +24,18 @@ rng = Random.default_rng()
     expected = exp_lie(G, vel)
 
     @testset "Integration" begin
-        computed = last(sol)
+        computed = last(sol.u)
         # @error G vel computed expected
         @test isapprox(G, computed, expected)
 
         rm_ = RigidMotion(action, -vel)
         sol_ = AffineMotions.integrate_lift(rm+rm_, identity_element(G), .01)
-        id = last(sol_)
+        id = last(sol_.u)
         @test isapprox(G, id, identity_element(G))
 
         tm = TranslationMotion(G, vel, LeftSide())
         sol = AffineMotions.integrate_lift(tm, identity_element(G), .01)
-        @test isapprox(G, last(sol), exp_lie(G, -vel))
+        @test isapprox(G, last(sol.u), exp_lie(G, -vel))
     end
 
     # vel_ = rand_lie(rng, G)
