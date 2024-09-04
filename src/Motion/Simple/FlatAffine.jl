@@ -5,6 +5,7 @@
 Creates the affine motion corresponding to the vector field ``x ↦ A x + b``.
 
 ```jldoctest
+using AffineMotions
 A = [0 1.;0 0]
 b = [0, 0]
 motion = FlatAffineMotion(A,b)
@@ -12,7 +13,9 @@ motion = FlatAffineMotion(A,b)
 x0 = [2., 10] # position zero, velocity 10
 x1 = integrate(motion, x0)
 # output
-[12., 10]
+2-element Vector{Float64}:
+ 12.0
+ 10.0
 ```
 """
 struct FlatAffineMotion{TA,TM,TV} <: SimpleAffineMotion{TA}
