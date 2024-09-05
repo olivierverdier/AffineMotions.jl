@@ -69,6 +69,5 @@ function _add_rigid_motions(rms::AbstractRigidMotion{TA}...)  where {TA}
     return RigidMotion(action, sum([get_velocity(rm) for rm in rms]))
 end
 
-Base.isapprox(M1::RigidMotion{TA}, M2::RigidMotion{TA}; kwargs...) where {TA} = isapprox(M1.vel, M2.vel; kwargs...)
 
 include("Zero.jl")
