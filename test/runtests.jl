@@ -59,12 +59,12 @@ end
     @test_throws MethodError RigidMotion(action, vel) + TranslationMotion(G, vel, RightSide())
     @testset "Sum/Rescale $m" for m in motions
         @test m ≈ m
-        @test .5*m isa typeof(m)
-        @test 2*(.5*m) ≈ m
-        @test 2*m ≈ m+m broken=isa(m, AffineMotions.AffineMotionSum)
+        @test 0.5 * m isa typeof(m)
+        @test 2 * (0.5 * m) ≈ m
+        @test 2 * m ≈ m + m broken = isa(m, AffineMotions.AffineMotionSum)
         # if m is AffineMotionSum{TA, TV}, the sum is AffineMotionSum{TA, TV'} with another TV, hence the following two cases:
         if m isa AffineMotions.AffineMotionSum
-            @test m+m isa AffineMotions.AffineMotionSum
+            @test m + m isa AffineMotions.AffineMotionSum
         else
             @test m+m isa typeof(m)
         end
