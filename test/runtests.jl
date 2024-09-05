@@ -1,7 +1,7 @@
 using Test
 using AffineMotions
 
-import ManifoldGroupUtils: rand_lie
+import ManifoldGroupUtils: rand_lie, algebra
 
 using Manifolds
 
@@ -74,24 +74,29 @@ end
 @testset "Motion Sum" begin
     G = MultiDisplacement(4,2)
     m1 = AdjointLinearMotion(G, ones(2,2), LeftSide())
-    ξ = rand_lie(rng, (G))
+    ξ = rand_lie(rng, G)
 
     motions = (
-    rm = RigidMotion(GroupOperationAction(G), ξ),
-    tm = TranslationMotion(G, ξ, LeftSide()),
-    lm = AdjointLinearMotion(G, randn(rng, 2,2), LeftSide()),
+        rm=RigidMotion(GroupOperationAction(G), ξ),
+        tm=TranslationMotion(G, ξ, LeftSide()),
+        lm=AdjointLinearMotion(G, randn(rng, 2, 2), LeftSide()),
     )
 
     @testset "Sum type" for m in motions
-        m+m isa typeof(m)
-        m+m+m isa typeof(m)
+        m + m isa typeof(m)
+        m + m + m isa typeof(m)
     end
 
-    rm,tm,lm = motions
+    rm, tm, lm = motions
 
     @test (rm + tm) + lm ≈ rm + (tm + lm)
 
     @test (rm + tm) + (rm + tm) isa AffineMotions.AffineMotionSum
+
+    S = rm + tm + lm
+    χ = rand(rng, G)
+    @test isapprox(algebra(G), S(χ), rm(χ) + tm(χ) + lm(χ))
+    @test isapprox(algebra(G), S'(χ)(ξ), rm'(χ)(ξ) + tm'(χ)(ξ) + lm'(χ)(ξ))
 end
 
 
