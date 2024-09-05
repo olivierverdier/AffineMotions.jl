@@ -23,8 +23,10 @@ end
         b = rand(rng, dim)
         m = flat_affine_motion(A, b)
         m_ = FlatAffineMotion(A, b)
-        p = rand(rng, dim)
+        p = randn(rng, dim)
         @test m * p ≈ m_ * p
+        q = randn(rng, dim)
+        @test m_'(p)(q) ≈ A*q
     end
     @testset "Flat Translation" begin
         dim = 2
