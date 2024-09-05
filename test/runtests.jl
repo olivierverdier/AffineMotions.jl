@@ -104,7 +104,16 @@ end
     end
 end
 
-
+@testset "Rigid Motion Morphism" begin
+    G = SpecialOrthogonal(3)
+    M = Sphere(2)
+    x = [1,0,0]
+    A = RotationAction(M, G)
+    ξ = rand_lie(rng, G)
+    rm = RigidMotion(A, ξ)
+    M = last(AffineMotions.compute_morphism(rm, x, DefaultOrthogonalBasis()))
+    @test isapprox(M, LinearAlgebra.I)
+end
 
 include("test_integ.jl")
 
