@@ -97,6 +97,11 @@ end
     χ = rand(rng, G)
     @test isapprox(algebra(G), S(χ), rm(χ) + tm(χ) + lm(χ))
     @test isapprox(algebra(G), S'(χ)(ξ), rm'(χ)(ξ) + tm'(χ)(ξ) + lm'(χ)(ξ))
+    actions = [AffineMotions.get_action(m) for m in motions]
+    Sa = AffineMotions.get_action(S)
+    @test all(actions) do a
+        return Sa == a
+    end
 end
 
 
