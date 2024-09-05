@@ -61,6 +61,7 @@ end
         @test m ≈ m
         @test 0.5 * m isa typeof(m)
         @test 2 * (0.5 * m) ≈ m
+        @test m + (-m) ≈ 0*m broken = isa(m, AffineMotions.AffineMotionSum)
         @test 2 * m ≈ m + m broken = isa(m, AffineMotions.AffineMotionSum)
         # if m is AffineMotionSum{TA, TV}, the sum is AffineMotionSum{TA, TV'} with another TV, hence the following two cases:
         if m isa AffineMotions.AffineMotionSum
