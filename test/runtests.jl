@@ -1,4 +1,5 @@
-using Test
+include("header.jl")
+
 using AffineMotions
 
 import ManifoldGroupUtils: rand_lie, algebra
@@ -40,8 +41,8 @@ end
     G = SpecialOrthogonal(3)
     M = Sphere(2)
     A = RotationAction(M, G)
-    @test_throws ErrorException RigidMotion(A, 0)
-    @test_throws TypeError RigidMotion(GroupOperationAction(G,(RightAction(), RightSide())), rand_lie(rng, G))
+    Test.@test_throws ErrorException RigidMotion(A, 0)
+    Test.@test_throws TypeError RigidMotion(GroupOperationAction(G,(RightAction(), RightSide())), rand_lie(rng, G))
 end
 
 @testset "Motion Composition" begin
@@ -56,13 +57,13 @@ end
                ZeroMotion(action),
                RigidMotion(action, vel) + TranslationMotion(G, vel, LeftSide()),
                ]
-    @test_throws MethodError RigidMotion(action, vel) + TranslationMotion(G, vel, RightSide())
+    Test.@test_throws MethodError RigidMotion(action, vel) + TranslationMotion(G, vel, RightSide())
     @testset "Sum/Rescale $m" for m in motions
         @test m ≈ m
         @test 0.5 * m isa typeof(m)
         @test 2 * (0.5 * m) ≈ m
-        @test m + (-m) ≈ 0*m broken = isa(m, AffineMotions.AffineMotionSum)
-        @test 2 * m ≈ m + m broken = isa(m, AffineMotions.AffineMotionSum)
+        Test.@test m + (-m) ≈ 0*m broken = isa(m, AffineMotions.AffineMotionSum)
+        Test.@test 2 * m ≈ m + m broken = isa(m, AffineMotions.AffineMotionSum)
         # if m is AffineMotionSum{TA, TV}, the sum is AffineMotionSum{TA, TV'} with another TV, hence the following two cases:
         if m isa AffineMotions.AffineMotionSum
             @test m + m isa AffineMotions.AffineMotionSum
@@ -116,8 +117,11 @@ end
     @test isapprox(M, LinearAlgebra.I)
 end
 
-include("test_integ.jl")
+test_files = [
+    "test_integ.jl",
+    "test_swap.jl",
+    "test_flat.jl",
+]
 
-include("test_swap.jl")
+include_tests(test_files)
 
-include("test_flat.jl")

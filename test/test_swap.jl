@@ -1,4 +1,3 @@
-using Test
 using Manifolds
 
 function test_constant_dict(d::Dict, comp)
