@@ -6,10 +6,11 @@ import Random
 rng = Random.default_rng()
 
 
-@testset "Integration $G" for G in [SpecialOrthogonal(4),
-    MultiDisplacement(4),
-    MultiDisplacement(4, 2),
-    SpecialEuclidean(4),
+@testset "∫ $name" for (name, G) in [
+    "SO4" => SpecialOrthogonal(4),
+    "MD4" => MultiDisplacement(4),
+    "MD43" => MultiDisplacement(4, 2),
+    "SE4" => SpecialEuclidean(4),
 ]
     action = GroupOperationAction(G)
     vel = rand_lie(rng, G)
