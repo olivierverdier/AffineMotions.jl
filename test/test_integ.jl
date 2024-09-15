@@ -8,8 +8,8 @@ rng = Random.default_rng()
 
 @testset "∫ $name" for (name, G) in [
     "SO4" => SpecialOrthogonal(4),
-    "MD4" => MultiDisplacement(4),
-    "MD43" => MultiDisplacement(4, 2),
+    "MD4" => MultiDisplacementGroup(4),
+    "MD43" => MultiDisplacementGroup(4, 2),
     "SE4" => SpecialEuclidean(4),
 ]
     action = GroupOperationAction(G)

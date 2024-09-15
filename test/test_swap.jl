@@ -13,8 +13,8 @@ end
 @testset "Swap Group Motion $G" for G in [
     SpecialOrthogonal(3),
     # SpecialEuclidean(3),
-    MultiDisplacement(3, 1),
-    MultiDisplacement(3, 2),
+    MultiDisplacementGroup(3, 1),
+    MultiDisplacementGroup(3, 2),
     ]
     ξ = rand_lie(rng, G)
 
@@ -63,7 +63,7 @@ end
 
 
 @testset "Swap AdjointLinearMotion" begin
-    G = MultiDisplacement(3,2)
+    G = MultiDisplacementGroup(3,2)
     x0 = rand(rng, G)
     m1 = AdjointLinearMotion(G, [1.0 0;0 0], LeftSide())
     m2 = swap_group_motion(m1)
@@ -75,7 +75,7 @@ end
 end
 
 @testset "Swap AdjointLinear sum" begin
-    G = MultiDisplacement(3,2)
+    G = MultiDisplacementGroup(3,2)
     ξ = rand_lie(rng, G)
     m1 = AdjointLinearMotion(G, [1.0 0;0 0], LeftSide())
     rm = RigidMotion(GroupOperationAction(G), ξ)

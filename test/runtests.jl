@@ -6,7 +6,7 @@ import ManifoldGroupUtils: rand_lie, algebra
 
 using Manifolds
 
-import MultiAffine: MultiDisplacement, MultiAffineAction
+import MultiAffine: MultiDisplacementGroup, MultiAffineAction
 import LinearAlgebra
 
 using Random
@@ -46,7 +46,7 @@ end
 end
 
 @testset "Motion Composition" begin
-    G = MultiDisplacement(4,2)
+    G = MultiDisplacementGroup(4,2)
     M = randn(rng, 2, 2)
     action = GroupOperationAction(G)
     vel = rand_lie(rng, G)
@@ -74,7 +74,7 @@ end
 end
 
 @testset "Motion Sum" begin
-    G = MultiDisplacement(4,2)
+    G = MultiDisplacementGroup(4,2)
     m1 = AdjointLinearMotion(G, ones(2,2), LeftSide())
     ξ = rand_lie(rng, G)
 
