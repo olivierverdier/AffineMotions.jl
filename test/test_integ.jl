@@ -5,6 +5,54 @@ import Random
 
 rng = Random.default_rng()
 
+"""
+If ``F`` denotes the flow of the motion ``φ``,
+and if ``E = \exp(Dφ)``
+then
+```math
+F(\exp(ξ) ⋅ x_0) = \exp(Eξ) ⋅ F(x_0)
+```
+"""
+check_geodesic_preservation(m::AbstractAffineMotion, x0, ξ, B=DefaultOrthogonalBasis()) = begin
+    A = AffineMotions.get_action(m)
+    G = base_group(A)
+
+    # compute F(exp(ξ) ⋅ x0)
+    χ1 = exp_lie(base_group(A), ξ)
+    x0_ = apply(A, χ1, x0)
+    left = integrate(m, x0_)
+
+    # compute E = exp(Dφ) (a matrix)
+    E = AffineMotions.morphism(m, x0, B)
+
+    # compute exp(Eξ) ⋅ F(x0)
+    X = get_coordinates_lie(G, ξ, B)
+    Eξ = get_vector_lie(G, E * X, B)
+    χ = exp_lie(G, Eξ)
+    x1 = integrate(m, x0)
+    right = apply(A, χ, x1)
+
+    return isapprox(G, left, right)
+end
+
+@testset "geodesic" for G in [
+    MultiDisplacementGroup(3, 2),
+]
+    ξ = rand_lie(rng, G)
+    ξ0 = rand_lie(rng, G)
+
+    A = GroupOperationAction(G, (LeftAction(), LeftSide()))
+
+    @testset "m" for m in [
+        RigidMotion(A, ξ0),
+        TranslationMotion(G, ξ0, LeftSide()),
+        TranslationMotion(G, ξ0, RightSide()),
+    ]
+        A = AffineMotions.get_action(m)
+        x0 = rand(rng, group_manifold(A))
+        @test check_geodesic_preservation(m, x0, ξ)
+    end
+end
 
 @testset "∫ $name" for (name, G) in [
     "SO4" => SpecialOrthogonal(4),

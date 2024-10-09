@@ -199,6 +199,17 @@ function compute_morphism(motion, x, B; dt=0.1)
     return χ, morph
 end
 
+@doc raw"""
+     morphism(φ::Motion, x, B::AbstractBasis)
+
+Return the Lie algebra morphism ``\exp(Dφ)``,
+where ``Dφ`` is the linear part of the motion ``φ``.
+"""
+morphism(motion, x, B) = begin
+    mm = get_lin_mat(motion, x, B)
+    return exp(mm)
+end
+
 include("Motion/Simple/Rigid.jl")
 include("Motion/Simple/Translation.jl")
 include("Motion/Simple/FlatAffine.jl")

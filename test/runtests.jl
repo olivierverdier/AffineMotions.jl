@@ -2,7 +2,7 @@ include("header.jl")
 
 using AffineMotions
 
-import ManifoldGroupUtils: rand_lie, algebra
+using ManifoldGroupUtils
 
 using Manifolds
 

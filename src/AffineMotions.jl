@@ -5,6 +5,7 @@ using Manifolds
 import ManifoldDiffEq
 import OrdinaryDiffEq
 
+using ManifoldGroupUtils
 import ManifoldGroupUtils as GU
 
 export AbstractMotion, AbstractAffineMotion,
