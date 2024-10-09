@@ -18,6 +18,7 @@ export AbstractMotion, AbstractAffineMotion,
     swap_group_motion
 
 include("Motion.jl")
+include("Utils.jl")
 
 include("../ext/AdjointLinearExt/AdjointLinearExt.jl")
 

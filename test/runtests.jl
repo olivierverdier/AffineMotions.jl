@@ -121,6 +121,7 @@ test_files = [
     "test_integ.jl",
     "test_swap.jl",
     "test_flat.jl",
+    "test_utils.jl",
 ]
 
 include_tests(test_files)
