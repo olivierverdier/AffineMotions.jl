@@ -40,6 +40,12 @@ Order = [:type, :function]
 Pages = ["../ext/AdjointLinearExt/AdjointLinear.jl"]
 ```
 
+```@autodocs
+Modules = [AffineMotions]
+Order = [:type, :function]
+Pages = ["Utils.jl"]
+```
+
 ```@docs
 AffineMotions.AdjointLinearMotion
 ```
