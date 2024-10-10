@@ -67,7 +67,7 @@ end
     rm = RigidMotion(action, vel)
 
 
-    sol = AffineMotions.integrate_lift(1.0*rm, identity_element(G), .01)
+    sol = AffineMotions.integrate_lift(1.0*rm, identity_element(G); dt=.01)
     # test that sol(1) ≡ exp(ξ), for a rigid motion ξ
     expected = exp_lie(G, vel)
 
@@ -77,12 +77,12 @@ end
         @test isapprox(G, computed, expected)
 
         rm_ = RigidMotion(action, -vel)
-        sol_ = AffineMotions.integrate_lift(rm+rm_, identity_element(G), .01)
+        sol_ = AffineMotions.integrate_lift(rm+rm_, identity_element(G);dt=.01)
         id = last(sol_.u)
         @test isapprox(G, id, identity_element(G))
 
         tm = TranslationMotion(G, vel, LeftSide())
-        sol = AffineMotions.integrate_lift(tm, identity_element(G), .01)
+        sol = AffineMotions.integrate_lift(tm, identity_element(G); dt=.01)
         @test isapprox(G, last(sol.u), exp_lie(G, -vel))
     end
 

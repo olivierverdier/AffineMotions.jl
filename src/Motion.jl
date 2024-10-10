@@ -114,8 +114,8 @@ Integrate the lifted motion in the acting group.
 """
 function integrate_lift(
     m::AbstractMotion,
-    x0,
-    dt,
+    x0;
+    dt=0.1,
     method=ManifoldDiffEq.RKMK4
     )
     action = get_action(m)
@@ -133,14 +133,14 @@ Integrate the motion `motion` from the point `x0` on the manifold.
 """
 function integrate(
     motion::AbstractMotion,
-    x0,
+    x0;
     dt=0.1
-) 
+)
     action = get_action(motion)
     # manifold = group_manifold(action)
     # @assert is_point(manifold, x0)
 
-    sol = integrate_lift(motion, x0, dt)
+    sol = integrate_lift(motion, x0; dt)
     χ = last(sol.u)
     x = apply(action, χ, x0)
     return x
@@ -188,7 +188,7 @@ This allows to compute the associate morphism, i.e., the operator
 function compute_morphism(motion, x, B; dt=0.1)
     action = get_action(motion)
 
-    sol = integrate_lift(motion, x, dt)
+    sol = integrate_lift(motion, x; dt)
     χ = last(sol.u)
 
 
