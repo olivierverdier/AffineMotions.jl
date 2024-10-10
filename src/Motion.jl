@@ -143,7 +143,7 @@ function integrate(
     # manifold = group_manifold(action)
     # @assert is_point(manifold, x0)
 
-    sol = integrate_lift(motion, x0; dt)
+    sol = integrate_lift(x0, motion; dt)
     χ = last(sol.u)
     x = apply(action, χ, x0)
     return x
