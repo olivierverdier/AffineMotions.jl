@@ -24,8 +24,7 @@ TranslationMotion(G, vel, conv::Manifolds.GroupActionSide) = TranslationMotion{t
 get_action(m::TranslationMotion{TAD}) where {TAD} = _get_group_operation_action(m.G, TAD())
 
 get_dynamics(m::TranslationMotion{LeftSide}, u) =  -adjoint_action(m.G, u, m.vel)
-# TODO: should be inverse adjoint action here?
-get_dynamics(m::TranslationMotion{RightSide}, u) =  -adjoint_action(m.G, inv(m.G, u), m.vel)
+get_dynamics(m::TranslationMotion{RightSide}, u) =  -adjoint_action(m.G, u, m.vel, RightAction())
 
 function get_lin(m::TranslationMotion)
     G = base_group(get_action(m))
