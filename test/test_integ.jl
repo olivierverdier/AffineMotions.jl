@@ -5,7 +5,7 @@ import Random
 
 rng = Random.default_rng()
 
-"""
+@doc raw"""
 If ``F`` denotes the flow of the motion ``φ``,
 and if ``E = \exp(Dφ)``
 then
