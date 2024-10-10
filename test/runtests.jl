@@ -12,6 +12,47 @@ import LinearAlgebra
 using Random
 rng = Random.default_rng()
 
+"""
+Compose the adjoint action with the matrix M, i.e.,
+given M ∈ Alg(G) ⊗ Alg(G)*,
+the new operator is defined by
+ξ ↦ χ (Mξ) χ⁻¹
+and the function returns the corresponding matrix.
+"""
+function compose_adjoint(
+    G,
+    elt,
+    morph_mat,
+    B::AbstractBasis
+    ) 
+    op(ξ) = adjoint_action(G, elt, ξ)
+    return ManifoldGroupUtils.compose_lie_matrix_op(G, op, morph_mat, B)
+end
+
+@doc raw"""
+     compute_morphism(φ::Motion, x, B::AbstractBasis)
+
+Integrate the lift of the motion ``φ`` at the point ``x``,
+this gives a group element ``χ``.
+This allows to compute the associate morphism, i.e., the operator
+```math
+ξ ↦ χ^{-1} (\exp(Dφ)ξ) χ
+```
+"""
+function compute_morphism(motion, x, B; dt=0.1)
+    action = AffineMotions.get_action(motion)
+
+    sol = AffineMotions.integrate_lift(motion, x; dt)
+    χ = last(sol.u)
+
+
+    G = base_group(action)
+    mm = AffineMotions.get_lin_mat(motion, x, B)
+    morph = compose_adjoint(G, inv(G, χ), exp(mm), B)
+
+    return χ, morph
+end
+
 
 # Base.length(x::ProductRepr) = sum(map(Base.length, submanifold_components(x)))
 # Base.convert(::Type{ArrayPartition}, x::ProductRepr) = ArrayPartition(submanifold_components(x)...)
@@ -113,7 +154,7 @@ end
     A = RotationAction(M, G)
     ξ = rand_lie(rng, G)
     rm = RigidMotion(A, ξ)
-    M = last(AffineMotions.compute_morphism(rm, x, DefaultOrthogonalBasis()))
+    M = last(compute_morphism(rm, x, DefaultOrthogonalBasis()))
     @test isapprox(M, LinearAlgebra.I)
 end
 

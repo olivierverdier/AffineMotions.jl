@@ -95,7 +95,7 @@ end
         B = DefaultOrthogonalBasis()
         # mm = get_adjoint_matrix(G, vel, B)
         mm = AffineMotions.get_lin_mat(rm, identity_element(G), B)
-        res_mat = AffineMotions.compose_adjoint(G, inv(G, expected), exp(mm), B)
+        res_mat = compose_adjoint(G, inv(G, expected), exp(mm), B)
         # display(res_mat)
         @test isapprox(res_mat, LinearAlgebra.I)
     end

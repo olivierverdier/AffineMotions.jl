@@ -14,7 +14,6 @@ export AbstractMotion, AbstractAffineMotion,
     ZeroMotion,
     get_flat_action,
     integrate,
-    # compose_adjoint,
     swap_group_motion
 
 include("Motion.jl")
