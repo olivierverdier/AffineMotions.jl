@@ -42,7 +42,7 @@ This allows to compute the associate morphism, i.e., the operator
 function compute_morphism(motion, x, B; dt=0.1)
     action = AffineMotions.get_action(motion)
 
-    sol = AffineMotions.integrate_lift(motion, x; dt)
+    sol = AffineMotions.integrate_lift(x, motion; dt)
     χ = last(sol.u)
 
 

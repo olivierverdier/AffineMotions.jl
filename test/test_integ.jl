@@ -20,7 +20,7 @@ check_geodesic_preservation(m::AbstractAffineMotion, x0, ξ, B=DefaultOrthogonal
     # compute F(exp(ξ) ⋅ x0)
     χ1 = exp_lie(base_group(A), ξ)
     x0_ = apply(A, χ1, x0)
-    left = integrate(m, x0_)
+    left = integrate(x0_, m)
 
     # compute E = exp(Dφ) (a matrix)
     E = AffineMotions.morphism(m, x0, B)
@@ -29,7 +29,7 @@ check_geodesic_preservation(m::AbstractAffineMotion, x0, ξ, B=DefaultOrthogonal
     X = get_coordinates_lie(G, ξ, B)
     Eξ = get_vector_lie(G, E * X, B)
     χ = exp_lie(G, Eξ)
-    x1 = integrate(m, x0)
+    x1 = integrate(x0, m)
     right = apply(A, χ, x1)
 
     return isapprox(G, left, right)
@@ -67,7 +67,7 @@ end
     rm = RigidMotion(action, vel)
 
 
-    sol = AffineMotions.integrate_lift(1.0*rm, identity_element(G); dt=.01)
+    sol = AffineMotions.integrate_lift(identity_element(G), 1.0 * rm; dt=0.01)
     # test that sol(1) ≡ exp(ξ), for a rigid motion ξ
     expected = exp_lie(G, vel)
 
@@ -77,12 +77,12 @@ end
         @test isapprox(G, computed, expected)
 
         rm_ = RigidMotion(action, -vel)
-        sol_ = AffineMotions.integrate_lift(rm+rm_, identity_element(G);dt=.01)
+        sol_ = AffineMotions.integrate_lift(identity_element(G), rm + rm_; dt=0.01)
         id = last(sol_.u)
         @test isapprox(G, id, identity_element(G))
 
         tm = TranslationMotion(G, vel, LeftSide())
-        sol = AffineMotions.integrate_lift(tm, identity_element(G); dt=.01)
+        sol = AffineMotions.integrate_lift(identity_element(G), tm; dt=0.01)
         @test isapprox(G, last(sol.u), exp_lie(G, -vel))
     end
 

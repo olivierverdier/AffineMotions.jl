@@ -34,7 +34,7 @@ end
             :T1__ => AffineMotions._swap_group_motion(T1),
         )
 
-        rM1 = Dict([(s => integrate(v, x0)) for (s,v) in M1]...)
+        rM1 = Dict([(s => integrate(x0, v)) for (s,v) in M1]...)
         # for v in values(rM1)
         #     @test isapprox(G, rM1[:R1], v)
         # end
@@ -52,7 +52,7 @@ end
             :T2__ => AffineMotions._swap_group_motion(T2),
         )
 
-        rM2 = Dict([(s => integrate(v, x0)) for (s,v) in M2]...)
+        rM2 = Dict([(s => integrate(x0, v)) for (s,v) in M2]...)
 
         test_constant_dict(rM2, (a,b) -> isapprox(G, a, b))
 
@@ -68,8 +68,8 @@ end
     m1 = AdjointLinearMotion(G, [1.0 0;0 0], LeftSide())
     m2 = swap_group_motion(m1)
     MAM = Dict(
-        :m1 => integrate(m1, x0),
-        :m2 => integrate(m2, x0),
+        :m1 => integrate(x0, m1),
+        :m2 => integrate(x0, m2),
     )
     test_constant_dict(MAM, (a,b) -> isapprox(G, a, b))
 end

@@ -11,7 +11,7 @@ b = [0, 0]
 motion = FlatAffineMotion(A,b)
 
 x0 = [2., 10] # position zero, velocity 10
-x1 = integrate(motion, x0)
+x1 = integrate(x0, motion)
 # output
 2-element Vector{Float64}:
  12.0

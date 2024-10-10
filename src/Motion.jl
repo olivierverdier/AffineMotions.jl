@@ -13,7 +13,7 @@ A = RotationAction(M, G)
 x = rand(M)
 φ(x) # ξ
 φ'(x) # linear operator Alg(G) → Alg(G)
-integrate(φ, x) # solution of x'=φ(x)⋅x
+integrate(x, φ) # solution of x'=φ(x)⋅x
 0.1*φ # rescaled motion
 ```
 """
@@ -108,13 +108,14 @@ end
 
 
 """
-    integrate_lift(m::AbstractMotion, x0) :: AbstractODESolution
+    integrate_lift(x0, m::AbstractMotion) :: AbstractODESolution
 
 Integrate the lifted motion in the acting group.
 """
 function integrate_lift(
+    x0,
     m::AbstractMotion,
-    x0;
+    ;
     dt=0.1,
     method=ManifoldDiffEq.RKMK4
     )
@@ -126,14 +127,16 @@ function integrate_lift(
     return OrdinaryDiffEq.solve(prob, algo, dt=dt)
 end
 
+@deprecate integrate_lift(m::AbstractMotion, x0; dt=0.1, method=ManifoldDiffEq.RKMK4) integrate_lift(x0, m; dt, method)
+
 """
-    integrate(motion, x0::TM) :: TM
+    integrate(x0::TM, motion::Motion) :: TM
 
 Integrate the motion `motion` from the point `x0` on the manifold.
 """
 function integrate(
-    motion::AbstractMotion,
-    x0;
+    x0,
+    motion::AbstractMotion;
     dt=0.1
 )
     action = get_action(motion)
@@ -145,6 +148,8 @@ function integrate(
     x = apply(action, χ, x0)
     return x
 end
+
+@deprecate integrate(m::AbstractMotion, x0; dt=0.1) integrate(x0, m; dt=dt)
 
 
 """
