@@ -1,7 +1,7 @@
 name = "AffineMotions"
 uuid = "4fe253f5-c7a7-4e36-a4a1-b5bab8c98bb8"
 authors = ["Olivier Verdier <olivier.verdier@gmail.com>"]
-version = "0.1.2"
+version = "0.2.0"
 
 [deps]
 ManifoldDiffEq = "1143c485-9b25-4e23-a65f-701df382ec90"
