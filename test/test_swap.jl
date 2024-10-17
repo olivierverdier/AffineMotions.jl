@@ -21,10 +21,14 @@ end
     # x0 = identity_element(G)
     x0 = rand(rng, G)
 
-    @testset "Rigid/Translation" begin
+    @testset "Rigid/Translation" for side in
+        [
+            LeftSide(),
+            RightSide(),
+         ]
 
-        R1 = RigidMotion(GroupOperationAction(G), ξ)
-        T1 = TranslationMotion(G, ξ, RightSide())
+        R1 = RigidMotion(GroupOperationAction(G, (LeftAction(), side)), ξ)
+        T1 = TranslationMotion(G, ξ, switch_side(side))
         M1 = Dict(
             :R1 => R1,
             :R1_ => swap_group_motion(R1),
@@ -40,24 +44,7 @@ end
         # end
         test_constant_dict(rM1, (a,b)->isapprox(G, a, b))
 
-        # R2 = RigidMotion(DualGroupOperationAction(G), ξ)
-        R2 = RigidMotion(GroupOperationAction(G, (LeftAction(), RightSide())), ξ)
-        T2 = TranslationMotion(G, ξ, LeftSide())
-        M2 = Dict(
-            :R2 => R2,
-            :R2_ => swap_group_motion(R2),
-            :R2__ => AffineMotions._swap_group_motion(R2),
-            :T2 => T2,
-            :T2_ => swap_group_motion(T2),
-            :T2__ => AffineMotions._swap_group_motion(T2),
-        )
-
-        rM2 = Dict([(s => integrate(x0, v)) for (s,v) in M2]...)
-
-        test_constant_dict(rM2, (a,b) -> isapprox(G, a, b))
-
     end
-
 
 end
 
