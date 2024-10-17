@@ -25,27 +25,38 @@ end
         [
             LeftSide(),
             RightSide(),
-         ]
+        ]
+        action = GroupOperationAction(G, (LeftAction(), side))
+        @testset for (R1, T1) in
+            [
+                (
+                    RigidMotion(action, ξ),
+                    TranslationMotion(G, ξ, switch_side(side))
+                ),
+                (
+                    ZeroMotion(action),
+                    TranslationMotion(G, zero(ξ), switch_side(side))
+                )
+            ]
 
-        R1 = RigidMotion(GroupOperationAction(G, (LeftAction(), side)), ξ)
-        T1 = TranslationMotion(G, ξ, switch_side(side))
-        M1 = Dict(
-            :R1 => R1,
-            :R1_ => swap_group_motion(R1),
-            :R1__ => AffineMotions._swap_group_motion(R1),
-            :T1 => T1,
-            :T1_ => swap_group_motion(T1),
-            :T1__ => AffineMotions._swap_group_motion(T1),
-        )
+            M1 = Dict(
+                :R1 => R1,
+                :R1_ => swap_group_motion(R1),
+                :R1__ => AffineMotions._swap_group_motion(R1),
+                :T1 => T1,
+                :T1_ => swap_group_motion(T1),
+                :T1__ => AffineMotions._swap_group_motion(T1),
+            )
 
-        rM1 = Dict([(s => integrate(x0, v)) for (s,v) in M1]...)
-        # for v in values(rM1)
-        #     @test isapprox(G, rM1[:R1], v)
-        # end
-        test_constant_dict(rM1, (a,b)->isapprox(G, a, b))
+            rM1 = Dict([(s => integrate(x0, v)) for (s,v) in M1]...)
+            # for v in values(rM1)
+            #     @test isapprox(G, rM1[:R1], v)
+            # end
+            test_constant_dict(rM1, (a,b)->isapprox(G, a, b))
+
+        end
 
     end
-
 end
 
 
